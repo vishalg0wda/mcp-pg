@@ -1,0 +1,115 @@
+openapi: 3.1.0
+info:
+  title: Pagination API Example
+  version: 1.0.0
+  description: API demonstrating pagination patterns
+# servers:
+#   - url: https://{domain}/restapi
+#     x-speakeasy-server-id: restapi
+#     description: The Docusign API environment
+#     variables:
+#       domain:
+#         description: The domain for the Docusign environment to use for SDK calls
+#         default: production
+#         enum:
+#           - production
+#           - sandbox
+#           - staging
+#           - test
+x-speakeasy-globals:
+  parameters:
+    - name: customerId
+      in: query
+      schema:
+        type: string  
+        example: "some example query param"        
+      required: true
+paths:
+  /foo:
+    get:
+      deprecated: true
+      x-speakeasy-mcp:
+        name: "get-foo"
+        description: "Get foo"
+      parameters:
+        - name: foo
+          in: query
+          schema:
+            type: string
+            example: "some example query param"
+          required: true
+        - name: bar
+          in: header
+          schema:
+            type: string
+            example: "some example query param"
+          required: true
+      responses:
+        '200':
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: string
+                  value:
+                    type: object
+                    properties:
+                      message:
+                        type: object
+              examples:
+                successExample:
+                  summary: Example successful response
+                  value:
+                    message: "This is a successful response for /foo"
+      security:
+        - apiKey: []
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 500
+          maxInterval: 60000
+          maxElapsedTime: 3600000
+          exponent: 1.5
+        statusCodes:
+          - 5XX
+          - 429
+        retryConnectionErrors: true
+      x-speakeasy-test-rebuild: true  # Forces regeneration of this test
+      x-examples:
+        request:
+          summary: Example request for /foo
+          value:
+            foo: "exampleFoo"
+            bar: "exampleBar"
+            customerId: "exampleCustomerId"
+  /bar:
+    get:
+      tags:
+        - meh
+      responses:
+        '200':
+          description: A successful response
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+                example: "exampleFile"
+      x-speakeasy-test-rebuild: true  # Forces regeneration of this test
+      x-examples:
+        request:
+          summary: Example request for /bar
+          value:
+            customerId: "exampleCustomerId"
+      x-speakeasy-mcp:
+        name: "get-bar"
+        description: "Get Bar"
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: foo_bar
+      in: header
