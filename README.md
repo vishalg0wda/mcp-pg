@@ -35,7 +35,6 @@ Dub API: Dub is link management infrastructure for companies to create marketing
 
 > [!TIP]
 > To finish publishing your MCP Server to npm and others you must [run your first generation action](https://www.speakeasy.com/docs/github-setup#step-by-step-guide).
-
 <details>
 <summary>DXT (Desktop Extension)</summary>
 
@@ -50,60 +49,29 @@ The DXT package includes the MCP server and all necessary configuration. Once in
 
 </details>
 https://www.anthropic.com/engineering/desktop-extensions
-<details>
-<summary>Claude</summary>
 
-Add the following server definition to your `claude_desktop_config.json` file:
-
-```json
-{
-  "mcpServers": {
-    "Dub": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "--package",
-        "Dub",
-        "--",
-        "mcp",
-        "start",
-        "--api-token",
-        "..."
-      ]
-    }
-  }
-}
-```
-
-</details>
 
 <details>
 <summary>Cursor</summary>
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=Dub&config=eyJtY3BTZXJ2ZXJzIjp7IkR1YiI6eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIi0tcGFja2FnZSIsIkR1YiIsIi0tIiwibWNwIiwic3RhcnQiLCItLWFwaS10b2tlbiIsIi4uLiJdfX19)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=Dub&config=eyJtY3BTZXJ2ZXJzIjp7IkR1YiI6eyJ0eXBlIjoic3NlIiwidXJsIjoiaHR0cHM6Ly9leGFtcGxlLWNsb3VkZmxhcmUtd29ya2VyLmNvbS9zc2UiLCJoZWFkZXJzIjp7ImF1dGhvcml6YXRpb24iOiIke0RVQl9UT0tFTn0ifX19fQ==)
 
 Or manually:
 
 1. Open Cursor Settings
 2. Select Tools and Integrations
 3. Select New MCP Server
-4. Paste the following JSON into the MCP Server Configuration field:
+4. If the configuration file is empty paste the following JSON into the MCP Server Configuration:
 
 ```json
 {
   "mcpServers": {
     "Dub": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "--package",
-        "Dub",
-        "--",
-        "mcp",
-        "start",
-        "--api-token",
-        "..."
-      ]
+      "type": "mcp",
+      "url": "https://example-cloudflare-worker.com/mcp",
+      "headers": {
+        "authorization": "${DUB_TOKEN}"
+      }
     }
   }
 }
@@ -115,27 +83,22 @@ Or manually:
 <summary>Claude Code CLI</summary>
 
 ```bash
-npx -y --package Dub -- mcp start --api-token ...
+claude mcp add --transport sse Dub undefined/sse --header "authorization: ..."
 ```
 
 </details>
-
 <details>
-<summary>Manual installation</summary>
-
-
-
-
+<summary> Stdio installation via npm </summary>
 To start the MCP server, run:
 
 ```bash
-npx -y --package Dub -- mcp start --api-token ...
+npx Dub start --api-token ...
 ```
 
 For a full list of server arguments, run:
 
-```bash
-npx -y --package Dub -- mcp start --help
+```
+npx Dub --help
 ```
 
 </details>

@@ -1,0 +1,21 @@
+
+name = "dub-mcp-server"
+main = "src/cloudflare-worker/cloudflare-worker.ts"
+compatibility_date = "2025-07-15"
+
+# Enable node compatibility for MCP SDK
+compatibility_flags = ["nodejs_compat"]
+
+# Durable Object binding for MCP Agent
+[[durable_objects.bindings]]
+name = "DUB_MCP"
+class_name = "DubMCP"
+
+# Durable Object migration
+[[migrations]]
+tag = "v1"
+new_classes = ["DubMCP"]
+
+# Development configuration
+[dev]
+port = 8787

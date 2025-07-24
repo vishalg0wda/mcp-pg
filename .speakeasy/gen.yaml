@@ -29,7 +29,7 @@ mcp-typescript:
     peerDependencies: {}
   author: Speakeasy
   baseErrorName: PetstoreError
-  cloudflareEnabled: false
+  cloudflareEnabled: true
   defaultErrorName: PetstoreDefaultError
   envVarPrefix: PETSTORE
   inputModelSuffix: input
