@@ -42,6 +42,52 @@ export class DubMCP extends McpAgent<Env, State, Props> {
   }
 }
 
+/**
+ * Fetches the DXT file from a GitHub repository
+ */
+async function fetchDXTFromGitHub(
+  githubRepoUrl: string,
+  githubToken?: string
+): Promise<Response> {
+  // Normalize the GitHub repo URL
+  let normalizedUrl: string;
+
+  if (githubRepoUrl.startsWith("https://github.com/")) {
+    // Full URL format: https://github.com/user/repo
+    normalizedUrl = githubRepoUrl.replace(/\/$/, "");
+  } else if (githubRepoUrl.includes("/") && !githubRepoUrl.includes("://")) {
+    // Org/repo format: user/repo
+    normalizedUrl = `https://github.com/${githubRepoUrl}`;
+  } else {
+    throw new Error(
+      "Invalid GitHub repository URL format. Use either 'org/repo' or 'https://github.com/org/repo'"
+    );
+  }
+
+  // Convert to raw GitHub URL for the DXT file
+  const rawUrl =
+    normalizedUrl.replace(
+      "https://github.com/",
+      "https://raw.githubusercontent.com/"
+    ) + "/main/mcp-server.dxt";
+
+  console.log(`Fetching DXT file from: ${rawUrl}`);
+  // Prepare headers for GitHub API request
+  const fetchHeaders: Record<string, string> = {
+    "User-Agent": "Cloudflare-Worker-DXT-Server",
+  };
+
+  // Add authentication if GitHub token is provided (for private repos)
+  if (githubToken) {
+    fetchHeaders["Authorization"] = `Bearer ${githubToken}`;
+  }
+
+  // Fetch the DXT file from GitHub
+  return await fetch(rawUrl, {
+    headers: fetchHeaders,
+  });
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: any) {
     const url = new URL(request.url);
@@ -57,7 +103,7 @@ export default {
       return DubMCP.serveSSE("/sse", { binding: "DUB_MCP" }).fetch(
         request,
         env,
-        ctx,
+        ctx
       );
     }
 
@@ -65,31 +111,60 @@ export default {
       return DubMCP.serve("/mcp", { binding: "DUB_MCP" }).fetch(
         request,
         env,
-        ctx,
+        ctx
       );
     }
 
     // Serve DXT file
     if (url.pathname === "/mcp-server.dxt") {
       try {
-        // Read the DXT file from filesystem
-        const fs = await import("fs/promises");
-        const path = await import("path");
+        // Get GitHub repo URL from environment variable
+        const githubRepoUrl = env.GITHUB_REPO_URL;
 
-        const dxtPath = path.resolve("./mcp-server.dxt");
-        const dxtContent = await fs.readFile(dxtPath);
+        if (!githubRepoUrl) {
+          console.error("GITHUB_REPO_URL environment variable not set");
+          return new Response("DXT file configuration missing", {
+            status: 500,
+          });
+        }
 
-        return new Response(dxtContent, {
+        // Fetch the DXT file from GitHub
+        const response = await fetchDXTFromGitHub(
+          githubRepoUrl,
+          env.GITHUB_TOKEN
+        );
+
+        if (!response.ok) {
+          console.error(
+            `Failed to fetch DXT file: ${response.status} ${response.statusText}`
+          );
+          if (response.status === 404) {
+            return new Response("DXT file not found in repository", {
+              status: 404,
+            });
+          } else if (response.status === 401 || response.status === 403) {
+            return new Response(
+              "Authentication required for private repository",
+              { status: 403 }
+            );
+          }
+          return new Response("Error accessing repository", { status: 500 });
+        }
+
+        // Stream the response directly with proper headers
+        return new Response(response.body, {
           headers: {
-            "Content-Type": getContentTypeFromFileName("mcp-server.dxt")
-              || "application/octet-stream",
-            "Content-Disposition": "attachment; filename=\"mcp-server.dxt\"",
+            "Content-Type":
+              getContentTypeFromFileName("mcp-server.dxt") ||
+              "application/octet-stream",
+            "Content-Disposition": 'attachment; filename="mcp-server.dxt"',
             "Cache-Control": "public, max-age=3600",
+            "Content-Length": response.headers.get("Content-Length") || "",
           },
         });
       } catch (error) {
         console.error("Error serving DXT file:", error);
-        return new Response("DXT file not found", { status: 404 });
+        return new Response("Error fetching DXT file", { status: 500 });
       }
     }
 

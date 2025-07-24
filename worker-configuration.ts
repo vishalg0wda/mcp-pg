@@ -7,4 +7,10 @@ export interface Env {
   // For example:
   // MY_KV_NAMESPACE: KVNamespace;
   // MY_DURABLE_OBJECT: DurableObjectNamespace;
+  
+  // GitHub repository URL for fetching the DXT file
+  GITHUB_REPO_URL?: string;
+  
+  // GitHub token for private repository access
+  GITHUB_TOKEN?: string;
 }
