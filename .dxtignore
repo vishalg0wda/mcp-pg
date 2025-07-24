@@ -1,0 +1,6 @@
+.speakeasy
+node_modules
+esm
+.vscode
+*.dxt
+bun.lock
