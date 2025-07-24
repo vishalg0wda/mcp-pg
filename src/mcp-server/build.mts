@@ -2,6 +2,7 @@
 
 import { build } from "bun";
 import { chmod } from "node:fs/promises";
+import { packExtension } from "@anthropic-ai/dxt";
 import { join } from "node:path";
 
 async function buildMcpServer() {
@@ -22,6 +23,14 @@ async function buildMcpServer() {
   // Set executable permissions on the output file
   const outputFile = join(destinationDir, "mcp-server.js");
   await chmod(outputFile, 0o755);
+
+  // Build the DXT file
+  const dxtFile = join(destinationDir, "mcp-server.dxt");
+  await packExtension({
+    extensionPath: ".",
+    outputPath: "mcp-server.dxt",
+    silent: false,
+  });
 }
 
 await buildMcpServer().catch((error) => {

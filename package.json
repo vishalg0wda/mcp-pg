@@ -9,7 +9,6 @@
   },
   "scripts": {
     "build": "bun src/mcp-server/build.mts && tsc",
-    "build:dxt": "bun install && bun src/mcp-server/build-dxt.mts",
     "check": "npm run lint",
     "lint": "eslint --cache --max-warnings=0 src",
     "prepublishOnly": "npm run build"

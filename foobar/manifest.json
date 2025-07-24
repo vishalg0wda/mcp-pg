@@ -1,0 +1,219 @@
+{
+  "dxt_version": "0.1",
+  "name": "Dub",
+  "version": "0.1.0",
+  "description": "",
+  "long_description": "Dub API: Dub is link management infrastructure for companies to create marketing campaigns, link sharing features, and referral programs.",
+  "author": {
+    "name": "Speakeasy"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "./bin/mcp-server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/bin/mcp-server.js",
+        "start",
+        "--api-token",
+        "${user_config.api_token}"
+      ]
+    }
+  },
+  "display_name": "Dub",
+  "tools": [
+    {
+      "name": "links-create",
+      "description": "Create a link\n\nCreate a link for the authenticated workspace."
+    },
+    {
+      "name": "links-list",
+      "description": "Retrieve a list of links\n\nRetrieve a paginated list of links for the authenticated workspace."
+    },
+    {
+      "name": "links-count",
+      "description": "Retrieve links count\n\nRetrieve the number of links for the authenticated workspace."
+    },
+    {
+      "name": "links-get",
+      "description": "Retrieve a link\n\nRetrieve the info for a link."
+    },
+    {
+      "name": "links-update",
+      "description": "Update a link\n\nUpdate a link for the authenticated workspace. If there's no change, returns it as it is."
+    },
+    {
+      "name": "links-delete",
+      "description": "Delete a link\n\nDelete a link for the authenticated workspace."
+    },
+    {
+      "name": "links-create-many",
+      "description": "Bulk create links\n\nBulk create up to 100 links for the authenticated workspace."
+    },
+    {
+      "name": "links-update-many",
+      "description": "Bulk update links\n\nBulk update up to 100 links with the same data for the authenticated workspace."
+    },
+    {
+      "name": "links-delete-many",
+      "description": "Bulk delete links\n\nBulk delete up to 100 links for the authenticated workspace."
+    },
+    {
+      "name": "links-upsert",
+      "description": "Upsert a link\n\nUpsert a link for the authenticated workspace by its URL. If a link with the same URL already exists, return it (or update it if there are any changes). Otherwise, a new link will be created."
+    },
+    {
+      "name": "analytics-retrieve",
+      "description": "Retrieve analytics for a link, a domain, or the authenticated workspace.\n\nRetrieve analytics for a link, a domain, or the authenticated workspace. The response type depends on the \\`event\\` and \\`type\\` query parameters."
+    },
+    {
+      "name": "events-list",
+      "description": "Retrieve a list of events\n\nRetrieve a paginated list of events for the authenticated workspace."
+    },
+    {
+      "name": "tags-create",
+      "description": "Create a tag\n\nCreate a tag for the authenticated workspace."
+    },
+    {
+      "name": "tags-list",
+      "description": "Retrieve a list of tags\n\nRetrieve a list of tags for the authenticated workspace."
+    },
+    {
+      "name": "tags-update",
+      "description": "Update a tag\n\nUpdate a tag in the workspace."
+    },
+    {
+      "name": "tags-delete",
+      "description": "Delete a tag\n\nDelete a tag from the workspace. All existing links will still work, but they will no longer be associated with this tag."
+    },
+    {
+      "name": "folders-create",
+      "description": "Create a folder\n\nCreate a folder for the authenticated workspace."
+    },
+    {
+      "name": "folders-list",
+      "description": "Retrieve a list of folders\n\nRetrieve a list of folders for the authenticated workspace."
+    },
+    {
+      "name": "folders-update",
+      "description": "Update a folder\n\nUpdate a folder in the workspace."
+    },
+    {
+      "name": "folders-delete",
+      "description": "Delete a folder\n\nDelete a folder from the workspace. All existing links will still work, but they will no longer be associated with this folder."
+    },
+    {
+      "name": "domains-create",
+      "description": "Create a domain\n\nCreate a domain for the authenticated workspace."
+    },
+    {
+      "name": "domains-list",
+      "description": "Retrieve a list of domains\n\nRetrieve a list of domains associated with the authenticated workspace."
+    },
+    {
+      "name": "domains-update",
+      "description": "Update a domain\n\nUpdate a domain for the authenticated workspace."
+    },
+    {
+      "name": "domains-delete",
+      "description": "Delete a domain\n\nDelete a domain from a workspace. It cannot be undone. This will also delete all the links associated with the domain."
+    },
+    {
+      "name": "domains-register",
+      "description": "Register a domain\n\nRegister a domain for the authenticated workspace. Only available for Enterprise Plans."
+    },
+    {
+      "name": "domains-check-status",
+      "description": "Check the availability of one or more domains\n\nCheck if a domain name is available for purchase. You can check multiple domains at once."
+    },
+    {
+      "name": "track-lead",
+      "description": "Track a lead\n\nTrack a lead for a short link."
+    },
+    {
+      "name": "track-sale",
+      "description": "Track a sale\n\nTrack a sale for a short link."
+    },
+    {
+      "name": "customers-list",
+      "description": "Retrieve a list of customers\n\nRetrieve a list of customers for the authenticated workspace."
+    },
+    {
+      "name": "customers-create",
+      "description": "Create a customer\n\n[Deprecated]: Customer creation can only be done via tracking a lead event. Use the /track/lead endpoint instead."
+    },
+    {
+      "name": "customers-get",
+      "description": "Retrieve a customer\n\nRetrieve a customer by ID for the authenticated workspace."
+    },
+    {
+      "name": "customers-update",
+      "description": "Update a customer\n\nUpdate a customer for the authenticated workspace."
+    },
+    {
+      "name": "customers-delete",
+      "description": "Delete a customer\n\nDelete a customer from a workspace."
+    },
+    {
+      "name": "partners-create",
+      "description": "Create a partner\n\nCreate a partner for a program. If partner exists, automatically enrolls them."
+    },
+    {
+      "name": "partners-create-link",
+      "description": "Create a link for a partner\n\nCreate a link for a partner that is enrolled in your program."
+    },
+    {
+      "name": "partners-retrieve-links",
+      "description": "Retrieve a partner's links.\n\nRetrieve a partner's links by their partner ID or tenant ID."
+    },
+    {
+      "name": "partners-upsert-link",
+      "description": "Upsert a link for a partner\n\nUpsert a link for a partner that is enrolled in your program. If a link with the same URL already exists, return it (or update it if there are any changes). Otherwise, a new link will be created."
+    },
+    {
+      "name": "partners-analytics",
+      "description": "Retrieve analytics for a partner\n\nRetrieve analytics for a partner within a program. The response type vary based on the \\`groupBy\\` query parameter."
+    },
+    {
+      "name": "commissions-list",
+      "description": "Get commissions for a program.\n\nRetrieve a list of commissions for a program."
+    },
+    {
+      "name": "commissions-update",
+      "description": "Update a commission.\n\nUpdate an existing commission amount. This is useful for handling refunds (partial or full) or fraudulent sales."
+    },
+    {
+      "name": "workspaces-get",
+      "description": "Retrieve a workspace\n\nRetrieve a workspace for the authenticated user."
+    },
+    {
+      "name": "workspaces-update",
+      "description": "Update a workspace\n\nUpdate a workspace by ID or slug."
+    },
+    {
+      "name": "embed-tokens-referrals",
+      "description": "Create a referrals embed token\n\nCreate a referrals embed token for the given partner/tenant."
+    },
+    {
+      "name": "QR-codes-get",
+      "description": "Retrieve a QR code\n\nRetrieve a QR code for a link."
+    }
+  ],
+  "prompts": [],
+  "keywords": [
+      "dub",
+      "api",
+      "link",
+      "management"
+    ],
+  "user_config": {
+      "api_token": {
+        "type": "string",
+        "title": "token",
+        "description": "The token to use for the request",
+        "required": true,
+        "sensitive": true
+      }
+    },
+  "icon": "dub.png"
+}
